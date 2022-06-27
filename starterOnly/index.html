@@ -72,6 +72,7 @@
                   name="first"
                   minlength="2"
                   required
+                  autocomplete="off"
                 /><br>
               </div>
               <div
@@ -84,6 +85,7 @@
                   name="last"
                   minlenght="2"
                   required
+                  autocomplete="off"
                 /><br>
               </div>
               <div
@@ -94,8 +96,7 @@
                   type="email"
                   id="email"
                   name="email"
-                  pattern= "^([\w\-\.]+)@((\[([0-9]{1,3}\.){3}[0-9]{1,3}\])|(([\w\-]+\.)+)([a-zA-Z]{2,4}))$"
-                  required 
+                  required
                 /><br>
               </div>
               <div
@@ -123,7 +124,6 @@
                   id="location1"
                   name="location"
                   value="New York"
-                  required
                 />
                 <label class="checkbox-label" for="location1">
                   <span class="checkbox-icon"></span>
@@ -191,9 +191,7 @@
                 <input
                   class="checkbox-input"
                   type="checkbox"
-                  id="checkbox1"
-                  required
-                  checked
+                  id="checkbox1"  
                 />
                 <label class="checkbox2-label" for="checkbox1">
                   <span class="checkbox-icon"></span>

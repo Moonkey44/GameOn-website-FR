@@ -14,7 +14,7 @@ body {
   margin: 0;
   display: flex;
   flex-direction: column;
-  background-image: url("background.png");
+  /*background-image: url("background.png");*/
   font-family: var(--font-default);
   font-size: 18px;
   max-width: 1300px;
@@ -93,10 +93,10 @@ img {
 
  @media screen and (max-width: 540px) {
   .topnav a {display: none;}
-  .topnav a.icon {
-    float: right;
+  .topnav a.icon{
+    float: none;
     display: block;
-    margin-top: -15px;
+    /*margin-bottom: -15px;*/
   }
 } 
 
@@ -110,8 +110,6 @@ main {
   margin: 1px 20px 15px;
   border-radius: 2rem;
   text-align: justify;
-
-
 }
 
 .modal-btn {
@@ -172,30 +170,16 @@ main {
   margin: 5% auto;
   width: 100%;
   max-width: 500px;
-  animation-name: modalopen;
-  animation-duration: var(--modal-duration);
+  -webkit-animation-name: modalopen;
+          animation-name: modalopen;
+  -webkit-animation-duration: var(--modal-duration);
+          animation-duration: var(--modal-duration);
   background: #232323;
   border-radius: 10px;
   overflow: hidden;
   position: relative;
   color: #fff;
-  padding-top: 10px;
-}
-
-.error-message{
-  width: 100%;
-  height: 25px;
-  background-color: #232323;
-  color: #fe142f;
-}
-
-.modal-body,.thanks-div{
-  padding: 15px 8%;
-  margin: 15px auto;
-}
-
-.thanks-div{
-  font-size: 23px;
+  padding: 40px;
 }
 
 label {
@@ -220,13 +204,13 @@ input {
 }
 .formData[data-error]::after {
   content: attr(data-error);
-  font-size: 0.4em;
+  font-size: 16px;
   color: #e54858;
   display: block;
-  margin-top: 7px;
-  margin-bottom: 7px;
-  text-align: right;
-  line-height: 0.3;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  text-align: center;
+  line-height: 1em;
   opacity: 0;
   transition: 0.3s;
 }
@@ -527,6 +511,16 @@ footer {
   }
 }
 
+@-webkit-keyframes modalopen {
+  from {
+    opacity: 0;
+    transform: translateY(-150px);
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @keyframes modalopen {
   from {
     opacity: 0;
@@ -534,6 +528,21 @@ footer {
   }
   to {
     opacity: 1;
+  }
+}
+
+@-webkit-keyframes errorInput{
+  0%{
+    transform: translateX(0px);
+  }
+  20%{
+    transform: translateX(-20px);
+  }
+  80%{
+    transform: translateX(20px);
+  }
+  100%{
+    transform: translateX(0px);
   }
 }
 
