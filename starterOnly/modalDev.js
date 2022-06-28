@@ -44,7 +44,7 @@ const entriesInput = [firstEntry,lastEntry,emailEntry,birthdateEntry,quantityEnt
 let userInformation=[];
 let locationChecked ="";
 
-//Définition de nos fonctions de test
+//Définition de notre fonctions de test de validation
 function validTest(event,index){
     event.target.style.animation = "none";
     event.target.style.background = validColor;
@@ -75,6 +75,7 @@ function validTest(event,index){
     }
 }
 
+//Définition de notre fonctions de test d'erreur -> on affiche un message d'erreur
 function errorTest(event, index){
     event.target.style.animation = "errorInput 100ms 3";
     event.target.style.background = errorColor;
@@ -91,6 +92,7 @@ function errorTest(event, index){
     }
 }
 
+// Définition de notre fonction de test, si la valeur de nos inputs sont vides alors supprime nos messages d'erreurs et nos animations
 function emptyTest(event,index){
     if(event.target.value === ""){
         event.target.style.animation = "none";
