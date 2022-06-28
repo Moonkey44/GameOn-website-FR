@@ -20,13 +20,12 @@ const quantityEntry = document.getElementById("quantity");
 const checkbox1 = document.getElementById("checkbox1");
 
 const locationEntry = document.getElementsByName("location");
-let locationChecked ="";
 
 const content = document.getElementsByClassName("content");
 const modalBody = document.getElementsByClassName("modal-body");
 const checkboxIcon = document.getElementsByClassName("checkbox-icon");
 const modalClose = document.querySelector(".close");
-
+//Définition de nos variables de couleurs / de validations de nos inputs
 const errorColor = "#e54858";
 const validColor = "#279e7a";
 let firstValidation = false;
@@ -35,10 +34,15 @@ let emailValidation = false;
 let birthdayValidation = false;
 let quantityValidation = false;
 let locationValidation = false;
-let checkboxValidation = false; 
+let checkboxValidation = false;
+//Définitions de notre tableau représentant chaque bouton (type radio) d'emplacement de tournois.
+//Ainsi qu'un tableau représentant nos input (type text)
 const locationInput =[formData[5].children[0],formData[5].children[2],formData[5].children[4],formData[5].children[6],formData[5].children[8],formData[5].children[10]];
 const entriesInput = [firstEntry,lastEntry,emailEntry,birthdateEntry,quantityEntry];
+//Définition d'un tableau qui va contenir nos données utilisateur (object user) 
+//Ainsi qu'une variable qui va contenir notre emplacement sélectioné
 let userInformation=[];
+let locationChecked ="";
 
 //Définition de nos fonctions de test
 function validTest(event,index){
@@ -47,11 +51,13 @@ function validTest(event,index){
     event.target.style.border = validColor;
     if(event.target.name === "last"){
         event.target.setCustomValidity("");
+        formData[1].setAttribute("data-error-visible",false);
         formData[1].removeAttribute("data-error");
         lastValidation = true;
     }
     if(event.target.name === "birthdate"){
         event.target.setCustomValidity("");
+        formData[3].setAttribute("data-error-visible",false);
         formData[3].removeAttribute("data-error");
         birthdayValidation = true;
     }
@@ -73,7 +79,7 @@ function errorTest(event, index){
     event.target.style.animation = "errorInput 100ms 3";
     event.target.style.background = errorColor;
     event.target.style.border = errorColor;
-    //Réglage du bug validationMessage non configurée pour l'input "Nom"
+    //Réglage du bug validationMessage non configurée pour l'input "Nom" -> réglé grâce à l'attribut minlength="2" 
     if(event.target.value.length === 1 && event.target.name === "last"){
         event.target.setCustomValidity("Veuillez allonger ce texte pour qu'il comporte au moins 2 caractères. Il en compte actuellement un seul.");
         formData[1].setAttribute("data-error-visible","true");
@@ -100,6 +106,7 @@ function emptyTest(event,index){
 }
 
 function resetForm(){
+    //On reset notre formulaire
     content[0].style.margin = "5% auto";
     modalbg.style.display = "none";
     thanksDivElt.style.display ="none";
@@ -113,28 +120,32 @@ function resetForm(){
         checkboxIcon[6].style.background = "#c4c4c4";
         checkbox1.checked = false;
     }
-    for(let index=0;index < 6;index++){
+    //On reset nos boutons d'emplacement en bouclant sur notre tableau
+    for(let index=0;index < locationInput.length;index++){
         if(locationInput[index].checked === true){
             locationInput[index].checked = false;
         }
     }
+    //Ainsi que toute nos entrées utilisateurs de type text
     for(entry of entriesInput){
         entry.value = "";
         entry.style.background = "white";
         entry.style.animation = "none";
     }
+    //Ainsi que nos messages utilisateur
     for(data of formData){
         if(data.getAttribute("data-error")){
+            data.setAttribute("data-error-visible",false);
             data.removeAttribute("data-error");
         }
     }
 }
-
+//On ajoute nos données utilisateurs ( de type objet) dans le tableau correspondant
 function addUser(userObject){
     userInformation.push(userObject);
 }
 
-//Reset et ferme la modale
+//Reset et ferme la modale lors du clic sur le bouton close
 modalClose.addEventListener("click", function(){
     resetForm();
 });
@@ -196,8 +207,11 @@ formData.forEach((input) => input.addEventListener("change",function textIsValid
             errorTest(event,4);
         }*/
     }
+    //Input de l'emplacement de tournois
     if(event.target.name === "location"){
+        //si notre bouton est sélectionné alors on supprime notre message d'erreur
         if(event.target.checked){
+            formData[5].setAttribute("data-error-visible",false);
             formData[5].removeAttribute("data-error");
             locationValidation = true;
         }
@@ -205,59 +219,68 @@ formData.forEach((input) => input.addEventListener("change",function textIsValid
             locationValidation = false;
         }
     }
+    //Réglage de la contrainte de validation pour notre checkbox obligatoire
     if(event.target.id === "checkbox1"){
         if(event.target.checked === false){
             checkboxIcon[6].style.animation = "errorInput 100ms 3";
             checkboxIcon[6].style.background = errorColor;
-            formData[6].setAttribute("data-error-visible",true);
             formData[6].setAttribute("data-error","Les conditions d'utilisation sont obligatoires ! Veuillez cocher le case correspondante.");
+            formData[6].setAttribute("data-error-visible",true);
             checkboxValidation = false;
         }
         if(event.target.checked){
             checkboxIcon[6].style.animation = "none";
             checkboxIcon[6].style.background = validColor;
+            formData[6].setAttribute("data-error-visible",false);
             formData[6].removeAttribute("data-error");
             checkboxValidation = true;
         }
     }
 }));
 
+//On définit notre bloc de remerciement en l'ajoutant à notre bloc du formulaire. Bien sur, on ne l'affiche pas tout de suite. 
 const thanksElt = document.createElement("p");
 const thanksDivElt = document.createElement("div");
-thanksElt.textContent = "Merci ! Votre réservation a été reçue.";
-thanksDivElt.setAttribute("class","thanks-div");
+thanksDivElt.style.height = "100px";
 thanksDivElt.style.display = "none";
+thanksElt.style.fontSize = "22px";
+thanksElt.style.textAlign= "center";
+thanksElt.style.margin = "50px auto 0 auto";
+thanksElt.textContent = "Merci ! Votre réservation a été reçue.";
 thanksDivElt.appendChild(thanksElt);
 content[0].appendChild(thanksDivElt);
 
+//définition de notre fonction qui va être activer lors du submit du formulaire
 async function validate(event){
+    //On arrête la propagation de l'évènement pour qu'il ne nous renvoit pas à la page demandée. 
     event.preventDefault();
+    //Si tous nos boutons d'emplacement ne sont pas coché alors on affiche une erreur
     if(locationInput[0].checked ===false && locationInput[1].checked ===false && locationInput[2].checked ===false && locationInput[3].checked ===false && locationInput[4].checked ===false && locationInput[5].checked ===false){
-        formData[5].setAttribute("data-error-visible",true);
         formData[5].setAttribute("data-error","Veuillez choisir une option de localisation !");
+        formData[5].setAttribute("data-error-visible",true);
         locationValidation = false;
     }
+    //Si notre bouton obligatoire n'est pas coché alors on affiche une erreur 
     if(formData[6].children[0].checked === false){
         checkboxIcon[6].style.animation = "errorInput 100ms 3";
         checkboxIcon[6].style.background = errorColor;
-        formData[6].setAttribute("data-error-visible",true);
         formData[6].setAttribute("data-error","Les conditions d'utilisation sont obligatoires ! Veuillez cocher la case correspondante.");
+        formData[6].setAttribute("data-error-visible",true);
         checkboxValidation = false;
     }
+    //Si notre formulaire est valide alors on affiche notre bloc de remerciement et on retire l'affichage de notre formulaire
     if (firstValidation && lastValidation && emailValidation && birthdayValidation && quantityValidation && locationValidation && checkboxValidation) {
         console.log("Formulaire Validé !");
-        modalBody[0].style.display = "none";
         content[0].style.margin = "20% auto";
-        thanksDivElt.style.height = "150px";
-        thanksElt.style.fontSize = "22px";
-        thanksElt.style.textAlign= "center";
-        thanksElt.style.margin = "15% auto 0 auto";
+        modalBody[0].style.display = "none";
         thanksDivElt.style.display = "block";
+        //on boucle sur notre tableau de bouton d'emplacement, en ajoutant la valeur du bouton sélectionné à notre variable 
         for(let index=0;index < locationEntry.length;index++){
             if(locationEntry[index].checked){
                 locationChecked = locationEntry[index].value;
             }
         }
+        //On construit un nouvel objet de type "user" pour l'ajouter à notre tableau d'utilisateur.
         const newUser = new user(firstEntry.value,lastEntry.value,emailEntry.value,birthdateEntry.value,quantityEntry.value,locationChecked,checkbox1.checked,checkbox2.checked);
         addUser(newUser);
         console.log(userInformation);

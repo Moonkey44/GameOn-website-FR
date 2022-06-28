@@ -25,10 +25,10 @@ p {
   margin-bottom: 0;
   padding: 0.5vw;
 }
-
+/* Enlever le padding inutile au logo
 img {
   padding-right: 1rem;
-}
+}*/
 
 .topnav {
   overflow: hidden;
@@ -68,9 +68,11 @@ img {
   display: none;
 }
 
+/* Réglage de l'icône en responsive : on enlève sa marge extérieur sauf pour le top */
 @media screen and (max-width: 768px) {
   .topnav a {display: none;}
   .topnav a.icon {
+    margin: 5px 0 0 0;
     float: right;
     display: block;
   }
@@ -180,6 +182,13 @@ main {
   position: relative;
   color: #fff;
   padding: 40px;
+}
+
+/* Partie responsive du formulaire retouché*/
+@media screen and ( max-width:400px){
+  .content{
+    padding:20px;
+  }
 }
 
 label {
@@ -300,8 +309,8 @@ input[data-error]::after {
   cursor: pointer;
   transform: scale(0.7);
 }
-.close:before,
-.close:after {
+.close::before,
+.close::after {
   position: absolute;
   left: 15px;
   content: " ";
@@ -309,10 +318,10 @@ input[data-error]::after {
   width: 3px;
   background-color: #fff;
 }
-.close:before {
+.close::before {
   transform: rotate(45deg);
 }
-.close:after {
+.close::after {
   transform: rotate(-45deg);
 }
 .btn-submit,
@@ -481,6 +490,7 @@ footer {
     background: #fff;
     color: #000;
     padding: 20px;
+    text-align: center;
   }
   .hero-content::after {
     content: unset;
@@ -510,7 +520,15 @@ footer {
     text-align: center;
   }
 }
-
+/* Partie responsive retouché*/
+@media screen and (max-width:460px) {
+  .hero-content{
+    padding: 0;
+  }
+  .hero-headline {
+    font-size: 3.5rem;
+  }
+}
 @-webkit-keyframes modalopen {
   from {
     opacity: 0;
