@@ -1,3 +1,4 @@
+//Définition de notre classe user pour pouvoir sauvegarder les données du formulaire plus tard
 class user{
     constructor(firstName="",lastName="",email="",birthdate="",quantity=0,location="",checkbox1=true,checkbox2=false){
         this.firstName = firstName;
@@ -49,29 +50,23 @@ function validTest(event,index){
     event.target.style.animation = "none";
     event.target.style.background = validColor;
     event.target.style.border = validColor;
+    event.target.setCustomValidity("");
+    formData[index].setAttribute("data-error-visible",false);
+    formData[index].removeAttribute("data-error");
+    if(event.target.name === "first"){
+        firstValidation = true;
+    }
     if(event.target.name === "last"){
-        event.target.setCustomValidity("");
-        formData[1].setAttribute("data-error-visible",false);
-        formData[1].removeAttribute("data-error");
         lastValidation = true;
     }
+    if(event.target.name === "email"){
+        emailValidation = true;
+    }
     if(event.target.name === "birthdate"){
-        event.target.setCustomValidity("");
-        formData[3].setAttribute("data-error-visible",false);
-        formData[3].removeAttribute("data-error");
         birthdayValidation = true;
     }
-    else{
-        formData[index].removeAttribute("data-error");
-        if(event.target.name === "first"){
-            firstValidation = true;
-        }
-        if(event.target.name === "email"){
-            emailValidation = true;
-        }
-        if(event.target.name === "quantity"){
-            quantityValidation = true;
-        }
+    if(event.target.name === "quantity"){
+        quantityValidation = true;
     }
 }
 
@@ -81,14 +76,28 @@ function errorTest(event, index){
     event.target.style.background = errorColor;
     event.target.style.border = errorColor;
     //Réglage du bug validationMessage non configurée pour l'input "Nom" -> réglé grâce à l'attribut minlength="2" 
-    if(event.target.value.length === 1 && event.target.name === "last"){
-        event.target.setCustomValidity("Veuillez allonger ce texte pour qu'il comporte au moins 2 caractères. Il en compte actuellement un seul.");
-        formData[1].setAttribute("data-error-visible","true");
-        formData[1].setAttribute("data-error",event.target.validationMessage);
+    if(event.target.value.length === 1 && event.target.name === "last" || event.target.name === "first"){
+        formData[index].setAttribute("data-error-visible","true");
+        formData[index].setAttribute("data-error",event.target.validationMessage);
     }
     else{
         formData[index].setAttribute("data-error-visible","true");
         formData[index].setAttribute("data-error",event.target.validationMessage);
+    }
+    if(event.target.name === "first"){
+        firstValidation = false;
+    }
+    if(event.target.name === "last"){
+        lastValidation = false;
+    }
+    if(event.target.name === "email"){
+        emailValidation = false;
+    }
+    if(event.target.name === "birthdate"){
+        birthdayValidation = false;
+    }
+    if(event.target.name === "quantity"){
+        quantityValidation = false;
     }
 }
 
@@ -97,11 +106,7 @@ function emptyTest(event,index){
     if(event.target.value === ""){
         event.target.style.animation = "none";
         event.target.style.background = "white";
-        if(event.target.name === "last"){
-            event.target.setCustomValidity("");
-            formData[1].setAttribute("data-error-visible",false);
-            formData[1].removeAttribute("data-error");
-        }
+        event.target.setCustomValidity("");
         formData[index].setAttribute("data-error-visible",false);
         formData[index].removeAttribute("data-error");
     }
@@ -147,6 +152,35 @@ function addUser(userObject){
     userInformation.push(userObject);
 }
 
+//Compare la date d'anniversaire avec le minimum et le maximum autorisée
+function compareDate(event){
+        const currentDate = new Date();
+        let userYear = event.target.value.substr(0,4);
+        const maxYear = currentDate.getFullYear();
+        const minYear = 1910;
+        const legalYear = maxYear - 16;
+        const message = "Veuillez saisir une date correcte";
+        //Si l'utilisateur à 16 ans ou moins, le formulaire ne sera pas validé.
+        if(userYear >= maxYear - 16 && userYear <= maxYear){
+            event.target.setCustomValidity("Désolé, vous êtes trop jeunes pour participer aux tournois !");
+        }
+        if(userYear > maxYear){
+            event.target.setCustomValidity(message + " inférieure ou égale à " + legalYear);
+        }
+        if(userYear <= minYear){
+            event.target.setCustomValidity(message + " comprise entre 1910 et " + legalYear);
+        }
+        if(userYear >= minYear && userYear <= legalYear){
+            validTest(event,3);
+        }
+        else{  
+            errorTest(event,3);
+        }
+        if(userYear === ""){
+            emptyTest(event,3);
+        }
+}
+
 //Reset et ferme la modale lors du clic sur le bouton close
 modalClose.addEventListener("click", function(){
     resetForm();
@@ -155,8 +189,9 @@ modalClose.addEventListener("click", function(){
 //Test visuel de nos inputs au changement de focus
 formData.forEach((input) => input.addEventListener("change",function textIsValid(event){
     //Inputs du prénom et du nom 
-    if(event.target.name === "first" || event.target.name === "last"){
+    if(event.target.name === "first"){
         if(event.target.value.length < 2 && event.target.value.length != 0){
+            event.target.setCustomValidity("Veuillez allonger ce texte pour qu'il comporte au moins 2 caractères.");
             errorTest(event,0);
         }
         if(event.target.value.length >= 2){
@@ -164,9 +199,19 @@ formData.forEach((input) => input.addEventListener("change",function textIsValid
         }
         emptyTest(event,0);
     }
+    if(event.target.name === "last"){
+        if(event.target.value.length < 2 && event.target.value.length != 0){
+            event.target.setCustomValidity("Veuillez allonger ce texte pour qu'il comporte au moins 2 caractères.");
+            errorTest(event,1);
+        }
+        if(event.target.value.length >= 2){
+            validTest(event,1);
+        }
+        emptyTest(event,1);
+    }
     //Input de l'email
     if(event.target.name === "email"){
-        if(event.target.validity.valid === true){
+        if(event.target.validity.valid){
             validTest(event,2);
         }
         if(event.target.validity.valid === false){
@@ -176,19 +221,13 @@ formData.forEach((input) => input.addEventListener("change",function textIsValid
     }
     //Input de la date de naissance
     if(event.target.name === "birthdate"){
-        let regexBirthday = new RegExp("^.{4}-.{2}-.{2}$");
+        let regexBirthday = new RegExp("^\d{4}-\d{2}-\d{2}$");
         let validBirthday = regexBirthday.test(event.target.value);
         if(validBirthday){
             validTest(event,3);
         }
         if(validBirthday === false){
-            if(event.target.value === event.target.defaultValue){
-                event.target.setCustomValidity("Veuillez saisir une valeur valide. Le champ n'est pas complet ou contient une date non valide.");
-            }
-            else{
-                event.target.setCustomValidity("Veuillez saisir une valeur valide au format : JJ/MM/AAAA");
-            }
-            errorTest(event,3);
+            compareDate(event);
         }
     }
     //Input du nombre de tournois fait par l'utilisateur
@@ -203,11 +242,10 @@ formData.forEach((input) => input.addEventListener("change",function textIsValid
             }
             emptyTest(event,4);
         }
-        //A revoir avec mon mentor
-        /*else if(String.isInteger(event.target.value)){
+        else if(String.isInteger(event.target.value)){
             event.target.validationMessage = "Le valeur saisie n'est pas un nombre";
             errorTest(event,4);
-        }*/
+        }
     }
     //Input de l'emplacement de tournois
     if(event.target.name === "location"){
@@ -226,7 +264,7 @@ formData.forEach((input) => input.addEventListener("change",function textIsValid
         if(event.target.checked === false){
             checkboxIcon[6].style.animation = "errorInput 100ms 3";
             checkboxIcon[6].style.background = errorColor;
-            formData[6].setAttribute("data-error","Les conditions d'utilisation sont obligatoires ! Veuillez cocher le case correspondante.");
+            formData[6].setAttribute("data-error","Les conditions d'utilisation sont obligatoires ! Veuillez cocher la case correspondante.");
             formData[6].setAttribute("data-error-visible",true);
             checkboxValidation = false;
         }
