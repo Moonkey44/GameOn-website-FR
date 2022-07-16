@@ -85,20 +85,22 @@ function errorTest(event, index){
         formData[index].setAttribute("data-error-visible","true");
         formData[index].setAttribute("data-error",event.target.validationMessage);
     }
-    if(event.target.name === "first"){
-        firstValidation = false;
-    }
-    if(event.target.name === "last"){
-        lastValidation = false;
-    }
-    if(event.target.name === "email"){
-        emailValidation = false;
-    }
-    if(event.target.name === "birthdate"){
-        birthdayValidation = false;
-    }
-    if(event.target.name === "quantity"){
-        quantityValidation = false;
+    switch(event.target.name){
+        case "first":
+            firstValidation = false;
+            break;
+        case "last":
+            lastValidation = false;
+            break;
+        case "email":
+            emailValidation = false;
+            break;
+        case "birthdate":
+            birthdayValidation = false;
+            break;
+        case "quantity":
+            quantityValidation = false;
+            break;
     }
 }
 
