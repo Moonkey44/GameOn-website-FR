@@ -119,7 +119,7 @@ function resetForm(){
     modalbg.style.display = "none";
     thanksDivElt.style.display ="none";
     modalBody[0].style.display = "block";
-    //Si nos checkbox sont activées ou non à la fermeture alors on reset les case à sa valeur initiale
+    //On reset nos checkbox à leurs valeurs initiales
     checkboxIcon[6].style.animation = "none";
     checkboxIcon[6].style.background = "#c4c4c4";
     checkboxIcon[7].style.background = "#c4c4c4";
@@ -225,7 +225,7 @@ formData.forEach((input) => input.addEventListener("change",function textIsValid
         if(validBirthday){
             validTest(event,3);
         }
-        if(validBirthday === false){
+        else{
             compareDate(event);
         }
     }
