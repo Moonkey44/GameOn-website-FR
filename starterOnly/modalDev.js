@@ -19,6 +19,7 @@ const emailEntry = document.getElementById("email");
 const birthdateEntry = document.getElementById("birthdate");
 const quantityEntry = document.getElementById("quantity");
 const checkbox1 = document.getElementById("checkbox1");
+const checkbox2 = document.getElementById("checkbox2");
 
 const locationEntry = document.getElementsByName("location");
 
@@ -118,17 +119,15 @@ function resetForm(){
     modalbg.style.display = "none";
     thanksDivElt.style.display ="none";
     modalBody[0].style.display = "block";
-    //Si la checkbox est activé ou non à la fermeture alors on reset la case à sa valeur initiale
-    if(checkbox1.checked === false){
-        checkboxIcon[6].style.animation = "none";
-        checkboxIcon[6].style.background = "#c4c4c4";
-    }
-    if(checkbox1.checked === true){
-        checkboxIcon[6].style.background = "#c4c4c4";
-        checkbox1.checked = false;
-    }
-    //On reset nos boutons d'emplacement en bouclant sur notre tableau
+    //Si nos checkbox sont activées ou non à la fermeture alors on reset les case à sa valeur initiale
+    checkboxIcon[6].style.animation = "none";
+    checkboxIcon[6].style.background = "#c4c4c4";
+    checkboxIcon[7].style.background = "#c4c4c4";
+    checkbox1.checked = false;
+    checkbox2.checked = false;
+    //On reset nos boutons d'emplacement et leurs couleurs en bouclant sur notre tableau
     for(let index=0;index < locationInput.length;index++){
+        checkboxIcon[index].style.borderColor = validColor;
         if(locationInput[index].checked === true){
             locationInput[index].checked = false;
         }
@@ -259,21 +258,34 @@ formData.forEach((input) => input.addEventListener("change",function textIsValid
             locationValidation = false;
         }
     }
+    if(locationInput[0].checked === true || locationInput[1].checked === true || locationInput[2].checked === true || locationInput[3].checked === true || locationInput[4].checked === true || locationInput[5].checked === true){
+        for(let index=0;index < locationEntry.length;index++){
+            checkboxIcon[index].style.borderColor = validColor;
+        }
+    }
     //Réglage de la contrainte de validation pour notre checkbox obligatoire
-    if(event.target.id === "checkbox1"){
-        if(event.target.checked === false){
+    if(event.target.checked === false){
+        if(event.target.id === "checkbox1"){
             checkboxIcon[6].style.animation = "errorInput 100ms 3";
             checkboxIcon[6].style.background = errorColor;
             formData[6].setAttribute("data-error","Les conditions d'utilisation sont obligatoires ! Veuillez cocher la case correspondante.");
             formData[6].setAttribute("data-error-visible",true);
             checkboxValidation = false;
         }
-        if(event.target.checked){
+        if(event.target.id === "checkbox2"){
+            checkboxIcon[7].style.background = "#c4c4c4";
+        }
+    }
+    else{
+        if(event.target.id === "checkbox1"){
             checkboxIcon[6].style.animation = "none";
             checkboxIcon[6].style.background = validColor;
             formData[6].setAttribute("data-error-visible",false);
             formData[6].removeAttribute("data-error");
             checkboxValidation = true;
+        }
+        if(event.target.id === "checkbox2"){
+            checkboxIcon[7].style.background = validColor;
         }
     }
 }));
@@ -299,6 +311,9 @@ async function validate(event){
         formData[5].setAttribute("data-error","Veuillez choisir une option de localisation !");
         formData[5].setAttribute("data-error-visible",true);
         locationValidation = false;
+        for(let index=0;index < locationEntry.length;index++){
+            checkboxIcon[index].style.borderColor = errorColor;
+        }
     }
     //Si notre bouton obligatoire n'est pas coché alors on affiche une erreur 
     if(formData[6].children[0].checked === false){
