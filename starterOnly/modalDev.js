@@ -27,6 +27,7 @@ const content = document.getElementsByClassName("content");
 const modalBody = document.getElementsByClassName("modal-body");
 const checkboxIcon = document.getElementsByClassName("checkbox-icon");
 const modalClose = document.querySelector(".close");
+const closeInput = document.createElement("input");
 //Définition de nos variables de couleurs / de validations de nos inputs
 const errorColor = "#e54858";
 const validColor = "#279e7a";
@@ -120,6 +121,7 @@ function resetForm(){
     content[0].style.margin = "5% auto";
     modalbg.style.display = "none";
     thanksDivElt.style.display ="none";
+    closeInput.style.display = "none";
     modalBody[0].style.display = "block";
     //On reset nos checkbox à leurs valeurs initiales
     checkboxIcon[6].style.animation = "none";
@@ -147,6 +149,9 @@ function resetForm(){
             data.removeAttribute("data-error");
         }
     }
+    /*topNav.style.display = "block";
+    heroSection.style.display = "grid";
+    footer.style.display = "block";*/
 }
 //On ajoute nos données utilisateurs ( de type objet) dans le tableau correspondant
 function addUser(userObject){
@@ -295,14 +300,23 @@ formData.forEach((input) => input.addEventListener("change",function textIsValid
 //On définit notre bloc de remerciement en l'ajoutant à notre bloc du formulaire. Bien sur, on ne l'affiche pas tout de suite. 
 const thanksElt = document.createElement("p");
 const thanksDivElt = document.createElement("div");
-thanksDivElt.style.height = "100px";
+thanksDivElt.style.height = "100%";
 thanksDivElt.style.display = "none";
-thanksElt.style.fontSize = "22px";
+thanksElt.style.fontSize = "34px";
 thanksElt.style.textAlign= "center";
-thanksElt.style.margin = "50px auto 0 auto";
-thanksElt.textContent = "Merci ! Votre réservation a été reçue.";
+thanksElt.style.margin = "200px auto 0 auto";
+thanksElt.style.width = "300px";
+thanksElt.innerHTML = "Merci pour <br> votre inscription";
+thanksElt.style.fontWeight = "normal";
+closeInput.classList.add("button","btn-submit");
+closeInput.type = "button";
+closeInput.value = "Fermer";
+closeInput.style.margin = "200px auto 0 auto";
+closeInput.style.display = "none";
+closeInput.addEventListener("click",resetForm);
 thanksDivElt.appendChild(thanksElt);
 content[0].appendChild(thanksDivElt);
+content[0].appendChild(closeInput);
 
 //définition de notre fonction qui va être activer lors du submit du formulaire
 async function validate(event){
@@ -331,6 +345,7 @@ async function validate(event){
         content[0].style.margin = "20% auto";
         modalBody[0].style.display = "none";
         thanksDivElt.style.display = "block";
+        closeInput.style.display = "block";
         //on boucle sur notre tableau de bouton d'emplacement, en ajoutant la valeur du bouton sélectionné à notre variable 
         for(let index=0;index < locationEntry.length;index++){
             if(locationEntry[index].checked){
