@@ -118,10 +118,11 @@ function emptyTest(event,index){
 }
 
 function resetForm(){
-    //On reset notre formulaire
+    //On remet notre navigation sur notre page d'acceuil si un mobile ouvre la modale
     if(modalbg.contains(topNav)){
         document.body.insertBefore(topNav,main);
     }
+    //On reset notre formulaire
     modalbg.style.display = "none";
     thanksDivElt.style.display ="none";
     closeInput.style.display = "none";
