@@ -22,11 +22,10 @@ const checkbox1 = document.getElementById("checkbox1");
 const checkbox2 = document.getElementById("checkbox2");
 
 const locationEntry = document.getElementsByName("location");
-
-const content = document.getElementsByClassName("content");
 const modalBody = document.getElementsByClassName("modal-body");
 const checkboxIcon = document.getElementsByClassName("checkbox-icon");
 const modalClose = document.querySelector(".close");
+const main = document.querySelector("main");
 const closeInput = document.createElement("input");
 //Définition de nos variables de couleurs / de validations de nos inputs
 const errorColor = "#e54858";
@@ -46,6 +45,8 @@ const entriesInput = [firstEntry,lastEntry,emailEntry,birthdateEntry,quantityEnt
 //Ainsi qu'une variable qui va contenir notre emplacement sélectioné
 let userInformation=[];
 let locationChecked ="";
+
+
 
 //Définition de notre fonctions de test de validation
 function validTest(event,index){
@@ -118,7 +119,9 @@ function emptyTest(event,index){
 
 function resetForm(){
     //On reset notre formulaire
-    content[0].style.margin = "5% auto";
+    if(modalbg.contains(topNav)){
+        document.body.insertBefore(topNav,main);
+    }
     modalbg.style.display = "none";
     thanksDivElt.style.display ="none";
     closeInput.style.display = "none";
@@ -149,9 +152,6 @@ function resetForm(){
             data.removeAttribute("data-error");
         }
     }
-    /*topNav.style.display = "block";
-    heroSection.style.display = "grid";
-    footer.style.display = "block";*/
 }
 //On ajoute nos données utilisateurs ( de type objet) dans le tableau correspondant
 function addUser(userObject){
@@ -315,8 +315,9 @@ closeInput.style.margin = "200px auto 0 auto";
 closeInput.style.display = "none";
 closeInput.addEventListener("click",resetForm);
 thanksDivElt.appendChild(thanksElt);
-content[0].appendChild(thanksDivElt);
-content[0].appendChild(closeInput);
+content.appendChild(thanksDivElt);
+content.appendChild(closeInput);
+
 
 //définition de notre fonction qui va être activer lors du submit du formulaire
 async function validate(event){
@@ -342,7 +343,7 @@ async function validate(event){
     //Si notre formulaire est valide alors on affiche notre bloc de remerciement et on retire l'affichage de notre formulaire
     if (firstValidation && lastValidation && emailValidation && birthdayValidation && quantityValidation && locationValidation && checkboxValidation) {
         console.log("Formulaire Validé !");
-        content[0].style.margin = "20% auto";
+        //content.style.margin = "20% auto";
         modalBody[0].style.display = "none";
         thanksDivElt.style.display = "block";
         closeInput.style.display = "block";
