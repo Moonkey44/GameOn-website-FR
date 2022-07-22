@@ -178,7 +178,7 @@ function compareDate(event){
             if(userYear >= legalYear && userYear <= maxYear){
                 event.target.setCustomValidity("Désolé, vous êtes trop jeunes pour participer aux tournois !");
             }
-            // Si l'utilisateur rentre une date supérieur au mois durant l'année courante ou supérieur au jour actuel durant l'année et le mois courants
+            // Si l'utilisateur rentre une date supérieur au mois durant l'année courante ou supérieur au jour actuel durant l'année et le mois courant
             if(userYear == maxYear && userMonth > maxMonth || userYear == maxYear && userMonth == maxMonth && userDay > maxDay){ 
                 event.target.setCustomValidity(message);
             }
@@ -191,11 +191,11 @@ function compareDate(event){
             else{  
                 errorTest(event,3);
             }
+        }
+        else{
             if(userYear == "" || userMonth == "" || userDay ==""){
                 emptyTest(event,3);
             }
-        }
-        else{
             event.target.setCustomValidity(message);
             errorTest(event,3);
         }
