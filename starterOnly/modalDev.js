@@ -172,22 +172,28 @@ function compareDate(event){
         const maxDay = currentDate.getDate();
         const minYear = 1910;
         const legalYear = maxYear - 16;
-        const message = "Veuillez saisir une date correcte";
-        //Si l'utilisateur à 16 ans ou moins, le formulaire ne sera pas validé.
-        if(userYear >= legalYear && userYear <= maxYear && userMonth <= maxMonth && userDay <= maxDay){
-            event.target.setCustomValidity("Désolé, vous êtes trop jeunes pour participer aux tournois !");
+        const message = "Veuillez saisir une date correcte comprise entre 1910 et " + legalYear;
+        if(validBirthday){
+            //Si l'utilisateur à 16 ans ou moins, le formulaire ne sera pas validé.
+            if(userYear >= legalYear && userYear <= maxYear && userMonth <= maxMonth && userDay <= maxDay){
+                event.target.setCustomValidity("Désolé, vous êtes trop jeunes pour participer aux tournois !");
+            }
+            if(userYear <= minYear || userYear > maxYear){
+                event.target.setCustomValidity(message);
+            }
+            if(userYear >= minYear && userYear <= legalYear){
+                validTest(event,3);
+            }
+            else{  
+                errorTest(event,3);
+            }
+            if(userYear === "" || userMonth === "" || userDay ===""){
+                emptyTest(event,3);
+            }
         }
-        if(userYear <= minYear || userYear > maxYear){
-            event.target.setCustomValidity(message + " comprise entre 1910 et " + legalYear);
-        }
-        if(userYear >= minYear && userYear <= legalYear && validBirthday){
-            validTest(event,3);
-        }
-        else{  
+        else{
+            event.target.setCustomValidity(message);
             errorTest(event,3);
-        }
-        if(userYear === "" || userMonth === "" || userDay ===""){
-            emptyTest(event,3);
         }
 }
 
