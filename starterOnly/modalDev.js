@@ -175,8 +175,14 @@ function compareDate(event){
         const message = "Veuillez saisir une date correcte comprise entre 1910 et " + legalYear;
         if(validBirthday){
             //Si l'utilisateur à 16 ans ou moins, le formulaire ne sera pas validé.
-            if(userYear >= legalYear && userYear <= maxYear && userMonth <= maxMonth && userDay <= maxDay){
+            if(userYear >= legalYear && userYear <= maxYear){
                 event.target.setCustomValidity("Désolé, vous êtes trop jeunes pour participer aux tournois !");
+            }
+            if(userYear == maxYear && userMonth > maxMonth){
+                event.target.setCustomValidity(message);
+            }
+            if(userYear == maxYear && userMonth == maxMonth && userDay > maxDay){
+                event.target.setCustomValidity(message);
             }
             if(userYear <= minYear || userYear > maxYear){
                 event.target.setCustomValidity(message);
@@ -187,7 +193,7 @@ function compareDate(event){
             else{  
                 errorTest(event,3);
             }
-            if(userYear === "" || userMonth === "" || userDay ===""){
+            if(userYear == "" || userMonth == "" || userDay ==""){
                 emptyTest(event,3);
             }
         }
