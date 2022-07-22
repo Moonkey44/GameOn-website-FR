@@ -162,28 +162,31 @@ function addUser(userObject){
 //Compare la date d'anniversaire avec le minimum et le maximum autorisée
 function compareDate(event){
         const currentDate = new Date();
+        let validRegex = /^\d{4}-\d{2}-\d{2}$/;
+        let validBirthday = validRegex.test(event.target.value);
         let userYear = event.target.value.substr(0,4);
+        let userMonth = event.target.value.substr(5,2);
+        let userDay = event.target.value.substr(8,2);
         const maxYear = currentDate.getFullYear();
+        const maxMonth = currentDate.getMonth()+ 1; // Le 1er mois commence à 0;
+        const maxDay = currentDate.getDate();
         const minYear = 1910;
         const legalYear = maxYear - 16;
         const message = "Veuillez saisir une date correcte";
         //Si l'utilisateur à 16 ans ou moins, le formulaire ne sera pas validé.
-        if(userYear >= maxYear - 16 && userYear <= maxYear){
+        if(userYear >= legalYear && userYear <= maxYear && userMonth <= maxMonth && userDay <= maxDay){
             event.target.setCustomValidity("Désolé, vous êtes trop jeunes pour participer aux tournois !");
         }
-        if(userYear > maxYear){
-            event.target.setCustomValidity(message + " inférieure ou égale à " + legalYear);
-        }
-        if(userYear <= minYear){
+        if(userYear <= minYear || userYear > maxYear){
             event.target.setCustomValidity(message + " comprise entre 1910 et " + legalYear);
         }
-        if(userYear >= minYear && userYear <= legalYear){
+        if(userYear >= minYear && userYear <= legalYear && validBirthday){
             validTest(event,3);
         }
         else{  
             errorTest(event,3);
         }
-        if(userYear === ""){
+        if(userYear === "" || userMonth === "" || userDay ===""){
             emptyTest(event,3);
         }
 }
@@ -228,14 +231,7 @@ formData.forEach((input) => input.addEventListener("change",function textIsValid
     }
     //Input de la date de naissance
     if(event.target.name === "birthdate"){
-        let regexBirthday = new RegExp("^\d{4}-\d{2}-\d{2}$");
-        let validBirthday = regexBirthday.test(event.target.value);
-        if(validBirthday){
-            validTest(event,3);
-        }
-        else{
-            compareDate(event);
-        }
+        compareDate(event);
     }
     //Input du nombre de tournois fait par l'utilisateur
     if(event.target.name === "quantity"){
