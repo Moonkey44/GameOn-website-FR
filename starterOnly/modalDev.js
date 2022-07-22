@@ -192,7 +192,11 @@ function compareDate(event){
                 errorTest(event,3);
             }
         }
-        else{
+        else{   
+            event.target.setCustomValidity(message);
+            errorTest(event,3);
+        }
+        if(userYear == "" || userMonth == "" || userDay ==""){
             emptyTest(event,3);
         }
 }
