@@ -164,9 +164,10 @@ function compareDate(event){
         const currentDate = new Date();
         let validRegex = /^\d{4}-\d{2}-\d{2}$/;
         let validBirthday = validRegex.test(event.target.value);
-        let userYear = event.target.value.substr(0,4);
-        let userMonth = event.target.value.substr(5,2);
-        let userDay = event.target.value.substr(8,2);
+        //Prend une partie de notre chaine de caratère et la convertie en nombre.
+        let userYear = Number(event.target.value.substr(0,4));
+        let userMonth = Number(event.target.value.substr(5,2));
+        let userDay = Number(event.target.value.substr(8,2));
         const maxYear = currentDate.getFullYear();
         const maxMonth = currentDate.getMonth()+ 1; // Le 1er mois commence à 0;
         const maxDay = currentDate.getDate();
@@ -179,7 +180,7 @@ function compareDate(event){
                 event.target.setCustomValidity("Désolé, vous êtes trop jeunes pour participer aux tournois !");
             }
             // Si l'utilisateur rentre une date supérieur au mois durant l'année courante ou supérieur au jour actuel durant l'année et le mois courant
-            if(userYear == maxYear && userMonth > maxMonth || userYear == maxYear && userMonth == maxMonth && userDay > maxDay){ 
+            if(userYear === maxYear && userMonth > maxMonth || userYear === maxYear && userMonth === maxMonth && userDay > maxDay){ 
                 event.target.setCustomValidity(message);
             }
             if(userYear <= minYear || userYear > maxYear){
@@ -196,7 +197,7 @@ function compareDate(event){
             event.target.setCustomValidity(message);
             errorTest(event,3);
         }
-        if(userYear == "" || userMonth == "" || userDay ==""){
+        if(userYear === "" || userMonth === "" || userDay ===""){
             emptyTest(event,3);
         }
 }
