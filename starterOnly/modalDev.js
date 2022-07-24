@@ -197,7 +197,7 @@ function compareDate(event){
             event.target.setCustomValidity(message);
             errorTest(event,3);
         }
-        if(userYear === "" || userMonth === "" || userDay ===""){
+        if(userYear === 0 || userMonth === 0 || userDay === 0){
             emptyTest(event,3);
         }
 }
@@ -327,7 +327,7 @@ content.appendChild(thanksDivElt);
 content.appendChild(closeInput);
 
 
-//définition de notre fonction qui va être activer lors du submit du formulaire
+//définition de notre fonction qui va être activer lors de l'appel de l'évènement submit du formulaire
 async function validate(event){
     //On arrête la propagation de l'évènement pour qu'il ne nous renvoit pas à la page demandée. 
     event.preventDefault();
